@@ -1,0 +1,51 @@
+﻿@using Blazored.LocalStorage
+@using Microsoft.AspNetCore.Components.Authorization
+@* <Router AppAssembly="typeof(Program).Assembly">
+    <Found Context="routeData">
+        <RouteView RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)" />
+        <FocusOnNavigate RouteData="routeData" Selector="h1" />
+    </Found>
+</Router> *@
+
+@inject ILocalStorageService LocalStorageService
+@inject HttpClient HttpClient
+@* @inject AuthService AuthService *@
+
+<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(Program).Assembly">
+        <Found Context="routeData">
+            <RouteView RouteData="@routeData" DefaultLayout="@typeof(Layout.MainLayout)" />
+        </Found>
+        <NotFound>
+            <LayoutView Layout="@typeof(Layout.MainLayout)">
+                <p>Sorry, there's nothing at this address.</p>
+            </LayoutView>
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>
+
+@code {
+    [Inject]
+    private NavigationManager NavigationManager { get; set; }
+    private AuthState authState = new AuthState();
+
+    protected override async Task OnInitializedAsync()
+    {
+      
+        var authService = new AuthService(HttpClient, LocalStorageService);
+
+        var token = await authService.GetTokenAsync();
+        authState.IsAuthenticated = !string.IsNullOrEmpty(token);
+
+        NavigationManager.LocationChanged += HandleLocationChanged;
+    }
+
+    private  void HandleLocationChanged(object sender, LocationChangedEventArgs e)
+    {
+        // بررسی دسترسی برای هر مسیر
+        if (!authState.IsAuthenticated && e.Location.StartsWith("/protected"))
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+    }
+}

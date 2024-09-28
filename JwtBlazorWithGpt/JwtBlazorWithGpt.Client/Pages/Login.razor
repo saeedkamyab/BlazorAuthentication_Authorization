@@ -1,0 +1,27 @@
+﻿@page "/"
+@using Blazored.LocalStorage
+<h3>Login</h3>
+<button @onclick="lll" >Login</button>
+@code {
+    @inject Blazored.LocalStorage.ILocalStorageService localStorage
+
+    public void lll()
+    {
+        LoginM("s", "s");
+    }
+    public async Task LoginM(string username, string password)
+    {
+        HttpClient _httpClient = new HttpClient();
+        var response = await _httpClient.PostAsJsonAsync("https://localhost:7186/api/Login", new { Username = username, Password = password });
+
+        if (response.IsSuccessStatusCode)
+        {
+            var token = await response.Content.ReadFromJsonAsync<TokenResponse>();
+            await localStorage.SetItemAsync("jwtToken", token.Token);
+
+            // همچنین می‌توانید توکن را در کوکی ذخیره کنید
+            // var options = new CookieOptions { HttpOnly = true, SameSite = SameSiteMode.Strict };
+            // _httpContextAccessor.HttpContext.Response.Cookies.Append("AuthToken", token.Token, options);
+        }
+    }
+}

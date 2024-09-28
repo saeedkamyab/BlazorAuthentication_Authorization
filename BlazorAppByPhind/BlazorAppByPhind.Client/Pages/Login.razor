@@ -1,0 +1,39 @@
+﻿@page "/login"
+
+@inject AuthService AuthService
+
+<h1>ورود به سیستم</h1>
+
+<EditForm Model="@model" OnValidSubmit="@HandleLogin">
+    <DataAnnotationsValidator />
+    <div>
+        <label for="username">نام کاربری:</label>
+        <InputText id="username" @bind-Value="model.Username" />
+        <ValidationMessage For="@(() => model.Username)" />
+    </div>
+    <div>
+        <label for="password">رمز عبور:</label>
+        <InputText id="password" type="password" @bind-Value="model.Password" />
+        <ValidationMessage For="@(() => model.Password)" />
+    </div>
+    <button type="submit">ورود</button>
+</EditForm>
+
+@code {
+    private LoginModel model = new LoginModel();
+    @inject NavigationManager NavigationManager
+
+    private async Task HandleLogin()
+    {
+        if (await AuthService.LoginAsync(model.Username, model.Password))
+        {
+            NavigationManager.NavigateTo("/");
+        }
+        else
+        {
+            // نمایش پیام خطا
+        }
+    }
+}
+
+

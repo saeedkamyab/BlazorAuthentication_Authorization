@@ -1,0 +1,66 @@
+﻿@page "/Login"
+@using BlazorAuth_Authorize.Client.Models
+@using Blazored.LocalStorage
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Text
+@using Newtonsoft.Json
+@inject ILocalStorageService LocalStorage
+
+<h3>Login</h3>
+
+<h3>Login</h3>
+<EditForm Model="user" OnSubmit="HandleLogin">
+    <label for="username">Name</label>
+    <InputText id="username" @bind-Value="user.UserName" />
+    <label for="password">Password</label>
+    <InputText id="password" @bind-Value="user.Password" type="password" />
+    <button type="submit" class="btn btn-primary">Do it!</button>
+</EditForm>
+
+@code {
+    LoginModel user = new LoginModel();
+    async Task HandleLogin()
+    {
+    
+
+        HttpClient client = new HttpClient();
+
+        var content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
+        var response = await client.PostAsync("https://localhost:7186/api/Login", content);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            Console.WriteLine($"Error: {response.StatusCode}");
+            var errorContent = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"Error content: {errorContent}");
+            return;
+        }
+        var result = await response.Content.ReadAsStringAsync();
+        try
+        {
+            var LoginResultModel = JsonConvert.DeserializeObject<AuthenticationResponse>(result);
+            
+            var customAuthStateProvider = (CustomAuthStateProvider)AuthStProvider;
+                await customAuthStateProvider.UpdateAuthenticationState(LoginResultModel.JwtToken);
+            //   NavManager.NavigateTo("/", forceLoad: true);
+
+                var token = LoginResultModel.JwtToken;
+            await LocalStorage.SetItemAsync("authToken", token);
+            await AuthStProvider.GetAuthenticationStateAsync();
+          
+            //var customAuthStateProvider = (CustomAuthenticationStateProvider)AuthStateProvider;
+            //await customAuthStateProvider.UpdateAuthenticationState(u.token);
+
+
+        }
+        catch (JsonException jsonEx)
+        {
+            Console.WriteLine("JSON Exception: " + jsonEx.Message);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Exception: " + ex.Message);
+        }
+    }
+    
+}

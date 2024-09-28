@@ -36,7 +36,8 @@ namespace MyApi.Controllers
                    issuer: "https://localhost:7186",
                    claims: new List<Claim>
                    {
-                new Claim(ClaimTypes.Name,userAccount.UserName),
+                           new Claim("FullName","SaeidKamyab"),
+                new Claim("Username",userAccount.UserName),
                 new Claim("Role",userAccount.UserRole.ToString())
                    },
                    expires: DateTime.Now.AddMinutes(30),

@@ -24,25 +24,25 @@ namespace BlazorAppAuthStateProvider.Client
             if (string.IsNullOrEmpty(token))
                 return await Task.FromResult(new AuthenticationState(anonymous));
 
-            var (name, username, permits) = GetClaims(token);
-            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(username))
+            var (fullName, username, roles) = GetClaims(token);
+            if (string.IsNullOrEmpty(fullName) || string.IsNullOrEmpty(username))
                 return await Task.FromResult(new AuthenticationState(anonymous));
 
-            var claims = SetClaimPrincipal(name, username, permits);
+            var claims = SetClaimPrincipal(fullName, username, roles);
             if (claims is null)
                 return await Task.FromResult(new AuthenticationState(anonymous));
             else
                 return await Task.FromResult(new AuthenticationState(claims));
 
         }
-        public static ClaimsPrincipal SetClaimPrincipal(string name, string username, string permits)
+        public static ClaimsPrincipal SetClaimPrincipal(string fullName, string username, string roles)
         {
-            if (name is null || username is null) return new ClaimsPrincipal();
+            if (fullName is null || username is null) return new ClaimsPrincipal();
             return new ClaimsPrincipal(new ClaimsIdentity(
             [
-                new (ClaimTypes.Name,name!),
+                new ("FullName",fullName!),
             new ("Username",username!),
-            new ("permits",permits!)
+            new ("roles",roles!)
             ], "JwtAuth"));
         }
         private static (string, string, string) GetClaims(string jwtToken)
@@ -54,11 +54,11 @@ namespace BlazorAppAuthStateProvider.Client
                 var handler = new JwtSecurityTokenHandler();
                 var token = handler.ReadJwtToken(jwtToken);
 
-                var name = token.Claims.FirstOrDefault(x => x.Type == "FullName")?.Value;
+                var fullName = token.Claims.FirstOrDefault(x => x.Type == "FullName")?.Value;
                 var username = token.Claims.FirstOrDefault(x => x.Type == "Username")?.Value;
-                var permits = token.Claims.FirstOrDefault(x => x.Type == "permits")?.Value;
+                var roles = token.Claims.FirstOrDefault(x => x.Type == "Role")?.Value;
 
-                return (name, username, permits);
+                return (fullName, username, roles);
             }
             catch (Exception ex)
             {
@@ -73,11 +73,11 @@ namespace BlazorAppAuthStateProvider.Client
             if (!string.IsNullOrEmpty(jwtToken))
             {
 
-                var (name, username, permits) = GetClaims(jwtToken);
-                if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(username))
+                var (fullName, username, roles) = GetClaims(jwtToken);
+                if (string.IsNullOrEmpty(fullName) || string.IsNullOrEmpty(username))
                     return;
 
-                var setedClaims = SetClaimPrincipal(name, username, permits);
+                var setedClaims = SetClaimPrincipal(fullName, username, roles);
                 claims = setedClaims;//I added and i don't know is true or not?
                 if (setedClaims is null)
                     return;

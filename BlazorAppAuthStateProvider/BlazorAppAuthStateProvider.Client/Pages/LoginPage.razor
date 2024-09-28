@@ -17,8 +17,10 @@
         if (response.IsSuccessStatusCode)
         {
             var token = await response.Content.ReadAsStringAsync();
-            await _localStorage.SetItemAsync("token", token);
+           // await _localStorage.SetItemAsync("authToken", token);
             tokenS = token;
+            var customAuthStateProvider = (MyStateProvider)AuthStateProvider;
+            await customAuthStateProvider.UpdateAuthenticationState(token);
         }
       //  return false;
     }

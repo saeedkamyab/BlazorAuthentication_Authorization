@@ -7,6 +7,18 @@
 <p role="status">Current count: @currentCount</p>
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<p></p>
+<AuthorizeView>
+    <Authorized>
+      
+        <span>Authroized</span>
+        <p></p>
+        <span>Welcome @context.User.Identity.Name</span>
+    </Authorized>
+    <NotAuthorized>
+        <span>Unauthroized</span>
+    </NotAuthorized>
+</AuthorizeView>
 
 @code {
     private int currentCount = 0;

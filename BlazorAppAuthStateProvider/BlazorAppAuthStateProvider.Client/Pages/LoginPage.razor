@@ -1,0 +1,25 @@
+﻿@page "/Login"
+
+@inject ILocalStorageService _localStorage
+<h3>LoginPage</h3>
+
+<span>
+    @tokenS
+</span>
+<p></p>
+<button @onclick="Login">Login Now !</button>
+@code {
+    HttpClient _httpClient = new();
+    string tokenS = "";
+    public async Task Login()
+    {
+        var response = await _httpClient.PostAsJsonAsync("https://localhost:7186/api/Login", new { Username = "s", Password = "s" });
+        if (response.IsSuccessStatusCode)
+        {
+            var token = await response.Content.ReadAsStringAsync();
+            await _localStorage.SetItemAsync("token", token);
+            tokenS = token;
+        }
+      //  return false;
+    }
+}

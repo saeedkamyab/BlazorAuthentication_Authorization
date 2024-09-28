@@ -27,15 +27,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JwtBlazorWithGpt.Client", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Phind", "Phind", "{BAAB109F-53BD-49C1-8E0D-4CEFBE7D3515}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorAppByPhind", "BlazorAppByPhind\BlazorAppByPhind\BlazorAppByPhind.csproj", "{A20B2518-6A41-493C-B076-C2176D424A14}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorAppByPhind", "BlazorAppByPhind\BlazorAppByPhind\BlazorAppByPhind.csproj", "{A20B2518-6A41-493C-B076-C2176D424A14}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorAppByPhind.Client", "BlazorAppByPhind\BlazorAppByPhind.Client\BlazorAppByPhind.Client.csproj", "{D83FDA51-7A6D-4C0E-A4A3-209AA8586F53}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorAppByPhind.Client", "BlazorAppByPhind\BlazorAppByPhind.Client\BlazorAppByPhind.Client.csproj", "{D83FDA51-7A6D-4C0E-A4A3-209AA8586F53}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "authStateProvider", "authStateProvider", "{D4D60BE9-20FD-4233-AB4E-3E541B953C5B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorAppAuthStateProvider", "BlazorAppAuthStateProvider\BlazorAppAuthStateProvider\BlazorAppAuthStateProvider.csproj", "{3BA9403C-B875-48E1-833E-7188326796C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorAppAuthStateProvider", "BlazorAppAuthStateProvider\BlazorAppAuthStateProvider\BlazorAppAuthStateProvider.csproj", "{3BA9403C-B875-48E1-833E-7188326796C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorAppAuthStateProvider.Client", "BlazorAppAuthStateProvider\BlazorAppAuthStateProvider.Client\BlazorAppAuthStateProvider.Client.csproj", "{2C9A9F57-6A44-4E8A-86C3-B3279A7CAE5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorAppAuthStateProvider.Client", "BlazorAppAuthStateProvider\BlazorAppAuthStateProvider.Client\BlazorAppAuthStateProvider.Client.csproj", "{2C9A9F57-6A44-4E8A-86C3-B3279A7CAE5E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

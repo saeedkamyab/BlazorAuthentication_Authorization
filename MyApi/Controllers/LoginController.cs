@@ -45,7 +45,7 @@ namespace MyApi.Controllers
 
                 var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOption);
 
-                return Ok(new { token = tokenString });
+                return Ok(tokenString);
             }
             else
             {

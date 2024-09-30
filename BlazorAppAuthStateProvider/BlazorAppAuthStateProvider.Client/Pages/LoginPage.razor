@@ -1,6 +1,6 @@
 ﻿@page "/Login"
-
-@inject ILocalStorageService _localStorage
+@using BlazorAppAuthStateProvider.Client.AuthProvider
+@inject NavigationManager navi;
 <h3>LoginPage</h3>
 
 <span>
@@ -17,10 +17,14 @@
         if (response.IsSuccessStatusCode)
         {
             var token = await response.Content.ReadAsStringAsync();
-           // await _localStorage.SetItemAsync("authToken", token);
             tokenS = token;
-            var customAuthStateProvider = (MyStateProvider)AuthStateProvider;
-            await customAuthStateProvider.UpdateAuthenticationState(token);
+
+
+            if (!string.IsNullOrWhiteSpace(token))
+            {
+                ((CustomAuthStateProvider)AuthStateProvider).MakeUserAuthenticated(token);
+                navi.NavigateTo("/");
+            }
         }
       //  return false;
     }

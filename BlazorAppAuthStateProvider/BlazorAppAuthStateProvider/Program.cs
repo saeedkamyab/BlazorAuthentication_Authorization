@@ -1,6 +1,11 @@
-using BlazorAppAuthStateProvider.Client.Pages;
+using BlazorAppAuthStateProvider.Client;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using BlazorAppAuthStateProvider.Components;
 using Blazored.LocalStorage;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using BlazorAppAuthStateProvider.Client.AuthProvider;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,7 +13,19 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
+
 builder.Services.AddBlazoredLocalStorage();
+
+
+
+builder.Services.AddAuthentication();//Mr.Sk Added
+builder.Services.AddAuthorization();//Mr.Sk Added
+builder.Services.AddAuthorizationCore();//Mr.Sk Added
+
+builder.Services.AddTransient<AuthenticationStateProvider, CustomAuthStateProvider>();
+
+
+builder.Services.AddCascadingAuthenticationState();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -25,12 +42,21 @@ else
 
 app.UseHttpsRedirection();
 
+app.UseBlazorFrameworkFiles();
+
 app.UseStaticFiles();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseAntiforgery();
+
+
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(BlazorAppAuthStateProvider.Client._Imports).Assembly);
+
 
 app.Run();
